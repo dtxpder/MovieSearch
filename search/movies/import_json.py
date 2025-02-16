@@ -5,18 +5,18 @@ def import_movies_from_json(file_path, source_site):
     with open(file_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
-    if not isinstance(data, list):  # Ensure the outer layer is a list
+    if not isinstance(data, list):
         print(f"Skipping {file_path}, expected a list at the root level.")
         return
 
     for task in data:
         result = task.get("result")
-        if not isinstance(result, dict):  # Ensure 'result' is a dictionary
+        if not isinstance(result, dict):
             print(f"Skipping task {task.get('id')}, 'result' is not a valid dictionary.")
             continue
 
         movies = result.get("items", [])
-        if not isinstance(movies, list):  # Ensure 'items' is a list
+        if not isinstance(movies, list):
             print(f"Skipping task {task.get('id')}, 'items' is not a valid list.")
             continue
 

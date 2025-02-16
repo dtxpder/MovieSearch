@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import "./App.css";
 
 function App() {
@@ -7,6 +7,19 @@ function App() {
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const titleParam = params.get("title") || "";
+        const siteParam = params.get("site") || "all";
+
+        setTitle(titleParam);
+        setSite(siteParam);
+
+        if (titleParam) {
+            searchMovies(titleParam, siteParam);
+        }
+    }, []);
 
     const searchMovies = async () => {
         // if (!title) {
@@ -22,6 +35,9 @@ function App() {
             if (site !== "all") {
                 apiUrl += `&site=${site}`;
             }
+
+            const newUrl = `${window.location.pathname}?title=${encodeURIComponent(title)}&site=${encodeURIComponent(site)}`;
+            window.history.pushState({}, "", newUrl);
 
             const response = await fetch(apiUrl);
             const data = await response.json();
@@ -70,12 +86,31 @@ function App() {
                                 src={movie.poster_url}
                                 alt={movie.title}
                                 width="100"
-                                onError={(e) => {
-                                    // if (e.target.src !== "http://localhost:5173/download.webp") {
-                                    e.target.onerror = null; // 避免无限触发
-                                    e.target.src = "http://localhost:5173/download.webp"; // ✅ 直接使用本地路径
-                                    // }
+                                // onError={(e) => {
+                                //     e.target.onerror = null;
+                                //     e.target.src = "http://localhost:5173/download.webp";
+                                // }}
+                                ref={(img) => {
+                                    if (!img) return;
+
+                                    // 设置一个超时定时器，1 秒后检查是否需要切换
+                                    const timeoutId = setTimeout(() => {
+                                        if (!img.complete || img.naturalWidth === 0) {
+                                            // 图片未加载成功，切换到备用图
+                                            img.src = "/download.webp";
+                                        }
+                                    }, 200);
+
+                                    // 如果图片成功加载，清除定时器，避免强制覆盖
+                                    img.onload = () => clearTimeout(timeoutId);
                                 }}
+                                onError={(e) => {
+                                    e.target.onerror = null; // 避免死循环
+                                    e.target.src = "/download.webp"; // 备用图片
+                                }}
+
+
+
                             />
                         </div>
 
