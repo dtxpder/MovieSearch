@@ -30,7 +30,9 @@ cd search
 ```sh
 docker-compose up --build
 ```
-Then access the service at http://localhost:5173
+Then access the service at:
+- Backend: http://localhost:8000
+- Frontend: http://localhost:5173
 
 ## API Endpoints
 **GET** /api/movies/?title=&lt;title&gt;&site=&lt;site&gt;
@@ -38,13 +40,15 @@ Then access the service at http://localhost:5173
 Query Parameters:
 - title: Required. Movie title, for example, "Top"
 - site: Optional. Filter by site, such as fmovies24.to, gogoflix.stream, or all
+
+`Get api/movies/?title=december&site=gogoflix.shop`
 ```json
 [
-  {
-    "title": "The Matrix",
-    "url": "https://fmovies24.to/movie/the-matrix-jy58",
-    "poster_url": "https://image.tmdb.org/t/p/w500/matrix.jpg",
-    "source_site": "fmovies24.to"
-  }
+    {
+        "title": "May December",
+        "url": "https://gogoflix.shop/categorie-films/26659-may-december-b9h38.html",
+        "poster_url": "https://gogoflix.shop/uploads/posts/may-december-XPoa1.webp",
+        "source_site": "gogoflix.shop"
+    }
 ]
 ```
