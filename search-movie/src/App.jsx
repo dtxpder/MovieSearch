@@ -93,20 +93,17 @@ function App() {
                                 ref={(img) => {
                                     if (!img) return;
 
-                                    // 设置一个超时定时器，1 秒后检查是否需要切换
                                     const timeoutId = setTimeout(() => {
                                         if (!img.complete || img.naturalWidth === 0) {
-                                            // 图片未加载成功，切换到备用图
                                             img.src = "/download.webp";
                                         }
                                     }, 200);
 
-                                    // 如果图片成功加载，清除定时器，避免强制覆盖
                                     img.onload = () => clearTimeout(timeoutId);
                                 }}
                                 onError={(e) => {
-                                    e.target.onerror = null; // 避免死循环
-                                    e.target.src = "/download.webp"; // 备用图片
+                                    e.target.onerror = null;
+                                    e.target.src = "/download.webp";
                                 }}
 
 

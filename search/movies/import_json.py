@@ -22,7 +22,7 @@ def import_movies_from_json(file_path, source_site):
 
         for item in movies:
             extracted = item.get("extracted_item")
-            if not extracted:  # Skip if no extracted content
+            if not extracted:
                 continue
 
             url = item.get("source", {}).get("url", "")
