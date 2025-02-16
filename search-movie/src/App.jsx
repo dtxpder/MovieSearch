@@ -97,7 +97,7 @@ function App() {
                                         if (!img.complete || img.naturalWidth === 0) {
                                             img.src = "/download.webp";
                                         }
-                                    }, 200);
+                                    }, 700);
 
                                     img.onload = () => clearTimeout(timeoutId);
                                 }}
